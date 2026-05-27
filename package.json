@@ -5,12 +5,16 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "fetch": "node src/fetchRates.js"
+    "fetch": "node src/fetchRates.js",
+    "build:api": "node src/buildApi.js",
+    "build": "npm run build:api",
+    "start": "node src/server.js"
   },
   "engines": {
     "node": ">=20"
   },
   "dependencies": {
+    "express": "^4.21.0",
     "fast-xml-parser": "^4.5.0"
   }
 }
