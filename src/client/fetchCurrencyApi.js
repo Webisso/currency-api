@@ -1,6 +1,7 @@
-const DEFAULT_PACKAGE = "@webisso/currency-api";
+const DEFAULT_REPO = "Webisso/currency-api";
+const DEFAULT_REF = "main";
 const DEFAULT_API_VERSION = "v1";
-const DEFAULT_FALLBACK_HOST = "currency-api.pages.dev";
+const DEFAULT_PAGES_BASE_URL = "https://webisso.github.io/currency-api";
 
 function normalizeDate(date) {
   if (date === "latest") {
@@ -27,15 +28,16 @@ export async function fetchCurrencyEndpoint({
   date = "latest",
   apiVersion = DEFAULT_API_VERSION,
   endpoint,
-  packageName = DEFAULT_PACKAGE,
-  fallbackHost = DEFAULT_FALLBACK_HOST,
+  repo = DEFAULT_REPO,
+  ref = DEFAULT_REF,
+  pagesBaseUrl = DEFAULT_PAGES_BASE_URL,
   fetchImpl = fetch
 }) {
   const normalizedDate = normalizeDate(date);
   const normalizedEndpoint = normalizeEndpoint(endpoint);
 
-  const primary = `https://cdn.jsdelivr.net/npm/${packageName}@${normalizedDate}/${apiVersion}/${normalizedEndpoint}`;
-  const fallback = `https://${normalizedDate}.${fallbackHost}/${apiVersion}/${normalizedEndpoint}`;
+  const primary = `https://cdn.jsdelivr.net/gh/${repo}@${ref}/public/${normalizedDate}/${apiVersion}/${normalizedEndpoint}`;
+  const fallback = `${pagesBaseUrl}/${normalizedDate}/${apiVersion}/${normalizedEndpoint}`;
 
   const candidates = [primary, fallback];
   let lastError;

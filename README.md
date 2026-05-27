@@ -9,6 +9,8 @@
 
 Production-ready currency rates collector and historical JSON API.
 
+Repository: https://github.com/Webisso/currency-api/
+
 ## Features
 
 - Free and fast static JSON responses
@@ -23,11 +25,11 @@ Production-ready currency rates collector and historical JSON API.
 
 GitHub Pages:
 
-`https://<username>.github.io/<repo>/{date}/{apiVersion}/{endpoint}`
+`https://webisso.github.io/currency-api/{date}/{apiVersion}/{endpoint}`
 
-jsDelivr (optional package distribution):
+jsDelivr (GitHub repository distribution):
 
-`https://cdn.jsdelivr.net/npm/<package>@{date}/{apiVersion}/{endpoint}`
+`https://cdn.jsdelivr.net/gh/Webisso/currency-api@main/public/{date}/{apiVersion}/{endpoint}`
 
 Format rules:
 
@@ -54,18 +56,22 @@ Format rules:
 
 ## Live-Style Examples
 
-Replace placeholders with your actual values:
+- `https://webisso.github.io/currency-api/latest/v1/currencies.json`
+- `https://webisso.github.io/currency-api/latest/v1/currencies/usd.json`
+- `https://webisso.github.io/currency-api/2026-05-25/v1/currencies/eur.min.json`
 
-- `https://<username>.github.io/<repo>/latest/v1/currencies.json`
-- `https://<username>.github.io/<repo>/latest/v1/currencies/usd.json`
-- `https://<username>.github.io/<repo>/2026-05-25/v1/currencies/eur.min.json`
+jsDelivr equivalents:
+
+- `https://cdn.jsdelivr.net/gh/Webisso/currency-api@main/public/latest/v1/currencies.json`
+- `https://cdn.jsdelivr.net/gh/Webisso/currency-api@main/public/latest/v1/currencies/usd.json`
+- `https://cdn.jsdelivr.net/gh/Webisso/currency-api@main/public/2026-05-25/v1/currencies/eur.min.json`
 
 ## Fallback Pattern
 
 Recommended client strategy:
 
 1. Try jsDelivr URL first.
-2. If it fails, use your fallback host (for example Cloudflare Pages domain).
+2. If it fails, fallback to GitHub Pages URL.
 
 You can use the built-in helper at `src/client/fetchCurrencyApi.js`.
 
