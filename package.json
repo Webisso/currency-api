@@ -1,0 +1,16 @@
+{
+  "name": "currency-api",
+  "version": "1.0.0",
+  "description": "Scheduled TCMB currency XML collector with historical file-based storage.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "fetch": "node src/fetchRates.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^4.5.0"
+  }
+}
