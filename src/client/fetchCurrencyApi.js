@@ -36,7 +36,7 @@ export async function fetchCurrencyEndpoint({
   const normalizedDate = normalizeDate(date);
   const normalizedEndpoint = normalizeEndpoint(endpoint);
 
-  const primary = `https://cdn.jsdelivr.net/gh/${repo}@${ref}/public/${normalizedDate}/${apiVersion}/${normalizedEndpoint}`;
+  const primary = `https://cdn.jsdelivr.net/gh/${repo}@${ref}/docs/${normalizedDate}/${apiVersion}/${normalizedEndpoint}`;
   const fallback = `${pagesBaseUrl}/${normalizedDate}/${apiVersion}/${normalizedEndpoint}`;
 
   const candidates = [primary, fallback];

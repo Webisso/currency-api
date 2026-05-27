@@ -7,7 +7,7 @@ on:
       - master
     paths-ignore:
       - "data/**"
-      - "public/**"
+      - "docs/**"
   schedule:
     # 17:30 TRT = 14:30 UTC
     - cron: "30 14 * * *"
@@ -47,7 +47,7 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git add data public
+          git add data docs
           if git diff --cached --quiet; then
             echo "No data changes to commit."
             exit 0

@@ -3,7 +3,7 @@ import express from "express";
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
-const publicDir = path.resolve(process.cwd(), "public");
+const publicDir = path.resolve(process.cwd(), "docs");
 
 app.get("/health", (_req, res) => {
   res.json({ status: "ok" });

@@ -1,7 +1,6 @@
 # Currency Rates API
 
 [![Daily Fetch](https://github.com/Webisso/currency-api/actions/workflows/daily-fetch.yml/badge.svg)](https://github.com/Webisso/currency-api/actions/workflows/daily-fetch.yml)
-[![Pages Deploy](https://github.com/Webisso/currency-api/actions/workflows/pages-deploy.yml/badge.svg)](https://github.com/Webisso/currency-api/actions/workflows/pages-deploy.yml)
 [![Release](https://img.shields.io/github/v/release/Webisso/currency-api?display_name=tag)](https://github.com/Webisso/currency-api/releases)
 [![Tag](https://img.shields.io/github/v/tag/Webisso/currency-api)](https://github.com/Webisso/currency-api/tags)
 [![Stars](https://img.shields.io/github/stars/Webisso/currency-api?style=social)](https://github.com/Webisso/currency-api/stargazers)
@@ -29,7 +28,7 @@ GitHub Pages:
 
 jsDelivr (GitHub repository distribution):
 
-`https://cdn.jsdelivr.net/gh/Webisso/currency-api@main/public/{date}/{apiVersion}/{endpoint}`
+`https://cdn.jsdelivr.net/gh/Webisso/currency-api@main/docs/{date}/{apiVersion}/{endpoint}`
 
 Format rules:
 
@@ -62,9 +61,9 @@ Format rules:
 
 jsDelivr equivalents:
 
-- `https://cdn.jsdelivr.net/gh/Webisso/currency-api@main/public/latest/v1/currencies.json`
-- `https://cdn.jsdelivr.net/gh/Webisso/currency-api@main/public/latest/v1/currencies/usd.json`
-- `https://cdn.jsdelivr.net/gh/Webisso/currency-api@main/public/2026-05-25/v1/currencies/eur.min.json`
+- `https://cdn.jsdelivr.net/gh/Webisso/currency-api@main/docs/latest/v1/currencies.json`
+- `https://cdn.jsdelivr.net/gh/Webisso/currency-api@main/docs/latest/v1/currencies/usd.json`
+- `https://cdn.jsdelivr.net/gh/Webisso/currency-api@main/docs/2026-05-25/v1/currencies/eur.min.json`
 
 ## Fallback Pattern
 
@@ -113,7 +112,7 @@ data/
   YYYY/
     MM/
       YYYY-MM-DD.xml
-public/
+docs/
   latest/
   YYYY-MM-DD/
 ```
@@ -124,9 +123,8 @@ public/
   - Scheduled fetch at `17:30` Turkey time (`14:30 UTC`)
   - Retries source fetch on transient failures
   - Builds JSON API outputs
-  - Commits `data/` and `public/` only when changes exist
-- `pages-deploy.yml`
-  - Deploys `public/` to GitHub Pages
+  - Commits `data/` and `docs/` only when changes exist
+  - Works with GitHub Pages source set to `main /docs`
 
 ## Configuration
 

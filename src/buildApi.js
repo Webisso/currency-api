@@ -65,7 +65,7 @@ async function buildDateVersion(outputRoot, snapshot) {
 async function run() {
   const rootDir = process.cwd();
   const dataDir = path.join(rootDir, "data");
-  const outputDir = path.join(rootDir, "public");
+  const outputDir = path.join(rootDir, "docs");
 
   await mkdir(outputDir, { recursive: true });
 
