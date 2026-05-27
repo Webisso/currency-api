@@ -190,6 +190,13 @@ async function writeLatestConversionAssets(outputRoot) {
   await writeFile(path.join(convertPageDir, "index.html"), CONVERT_HTML, "utf8");
 }
 
+async function writeLandingSite(rootDir, outputRoot) {
+  const sourcePath = path.join(rootDir, "site", "index.html");
+  const targetPath = path.join(outputRoot, "index.html");
+  const html = await readFile(sourcePath, "utf8");
+  await writeFile(targetPath, html, "utf8");
+}
+
 async function run() {
   const rootDir = process.cwd();
   const dataDir = path.join(rootDir, "data");
@@ -225,6 +232,7 @@ async function run() {
   });
 
   await writeLatestConversionAssets(outputDir);
+  await writeLandingSite(rootDir, outputDir);
 
   await writeFile(path.join(outputDir, ".nojekyll"), "", "utf8");
 

@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Currency API Playground</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Space Grotesk", "ui-sans-serif", "system-ui", "sans-serif"]
+            },
+            boxShadow: {
+              glow: "0 0 0 1px rgba(255,255,255,0.08), 0 20px 80px rgba(59,130,246,0.25)"
+            }
+          }
+        }
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen bg-slate-950 text-slate-100">
+    <div class="fixed inset-0 -z-10 overflow-hidden">
+      <div class="absolute -top-28 -left-20 h-80 w-80 rounded-full bg-cyan-500/20 blur-3xl"></div>
+      <div class="absolute top-1/3 -right-24 h-96 w-96 rounded-full bg-indigo-500/20 blur-3xl"></div>
+      <div class="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl"></div>
+    </div>
+
+    <main class="mx-auto max-w-7xl px-4 py-10 md:px-8">
+      <header class="mb-10 rounded-3xl border border-white/10 bg-white/[0.04] p-6 shadow-glow backdrop-blur md:p-10">
+        <p class="mb-3 inline-flex items-center rounded-full border border-cyan-300/40 bg-cyan-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200">Currency Data Platform</p>
+        <h1 class="mb-4 text-3xl font-bold leading-tight md:text-5xl">Realtime Playground for Static Currency Endpoints</h1>
+        <p class="max-w-3xl text-slate-300">Explore date-versioned rates, inspect response headers, and run conversion tests directly against GitHub Pages or jsDelivr. Built for fast testing, debugging, and integration checks.</p>
+        <div class="mt-6 flex flex-wrap gap-3 text-sm">
+          <a class="rounded-xl border border-white/20 bg-white/5 px-4 py-2 hover:bg-white/10" href="./latest/v1/currencies.json" target="_blank" rel="noreferrer">Open latest currencies</a>
+          <a class="rounded-xl border border-white/20 bg-white/5 px-4 py-2 hover:bg-white/10" href="./latest/v1/convert/?from=USD&to=EUR&unit=10" target="_blank" rel="noreferrer">Open conversion query</a>
+          <a class="rounded-xl border border-white/20 bg-white/5 px-4 py-2 hover:bg-white/10" href="https://github.com/Webisso/currency-api" target="_blank" rel="noreferrer">GitHub Repository</a>
+        </div>
+      </header>
+
+      <section class="grid gap-6 lg:grid-cols-2">
+        <article class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur md:p-6">
+          <h2 class="mb-4 text-xl font-semibold">Endpoint Playground</h2>
+
+          <div class="space-y-4">
+            <div>
+              <label class="mb-2 block text-sm text-slate-300">Provider</label>
+              <select id="provider" class="w-full rounded-xl border border-white/15 bg-slate-900 px-3 py-2 outline-none ring-cyan-300/50 focus:ring">
+                <option value="pages">GitHub Pages</option>
+                <option value="jsdelivr">jsDelivr</option>
+              </select>
+            </div>
+
+            <div class="grid gap-4 md:grid-cols-2">
+              <div>
+                <label class="mb-2 block text-sm text-slate-300">Date</label>
+                <input id="date" value="latest" class="w-full rounded-xl border border-white/15 bg-slate-900 px-3 py-2 outline-none ring-cyan-300/50 focus:ring" placeholder="latest or YYYY-MM-DD" />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm text-slate-300">API Version</label>
+                <input id="version" value="v1" class="w-full rounded-xl border border-white/15 bg-slate-900 px-3 py-2 outline-none ring-cyan-300/50 focus:ring" />
+              </div>
+            </div>
+
+            <div>
+              <label class="mb-2 block text-sm text-slate-300">Endpoint Template</label>
+              <select id="endpointTemplate" class="w-full rounded-xl border border-white/15 bg-slate-900 px-3 py-2 outline-none ring-cyan-300/50 focus:ring">
+                <option value="currencies.json">currencies.json</option>
+                <option value="currencies.min.json">currencies.min.json</option>
+                <option value="currencies/{base}.json">currencies/{base}.json</option>
+                <option value="currencies/{base}.min.json">currencies/{base}.min.json</option>
+                <option value="custom">custom</option>
+              </select>
+            </div>
+
+            <div class="grid gap-4 md:grid-cols-2">
+              <div>
+                <label class="mb-2 block text-sm text-slate-300">Base Code (if needed)</label>
+                <input id="baseCode" value="usd" class="w-full rounded-xl border border-white/15 bg-slate-900 px-3 py-2 outline-none ring-cyan-300/50 focus:ring" placeholder="usd" />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm text-slate-300">Custom Endpoint</label>
+                <input id="customEndpoint" value="" class="w-full rounded-xl border border-white/15 bg-slate-900 px-3 py-2 outline-none ring-cyan-300/50 focus:ring" placeholder="e.g. convert.js" />
+              </div>
+            </div>
+
+            <button id="sendRequest" class="w-full rounded-xl bg-cyan-400 px-4 py-2 font-semibold text-slate-950 transition hover:bg-cyan-300">Send GET Request</button>
+          </div>
+        </article>
+
+        <article class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur md:p-6">
+          <h2 class="mb-4 text-xl font-semibold">Conversion Playground</h2>
+          <div class="grid gap-4 md:grid-cols-3">
+            <div>
+              <label class="mb-2 block text-sm text-slate-300">From</label>
+              <input id="from" value="USD" class="w-full rounded-xl border border-white/15 bg-slate-900 px-3 py-2 outline-none ring-cyan-300/50 focus:ring" />
+            </div>
+            <div>
+              <label class="mb-2 block text-sm text-slate-300">To</label>
+              <input id="to" value="EUR" class="w-full rounded-xl border border-white/15 bg-slate-900 px-3 py-2 outline-none ring-cyan-300/50 focus:ring" />
+            </div>
+            <div>
+              <label class="mb-2 block text-sm text-slate-300">Unit</label>
+              <input id="unit" value="10" class="w-full rounded-xl border border-white/15 bg-slate-900 px-3 py-2 outline-none ring-cyan-300/50 focus:ring" />
+            </div>
+          </div>
+          <button id="runConvert" class="mt-4 w-full rounded-xl bg-emerald-400 px-4 py-2 font-semibold text-slate-950 transition hover:bg-emerald-300">Run Conversion Request</button>
+          <p class="mt-4 text-xs text-slate-400">This calls <span class="font-mono">/latest/v1/convert/?from=...&to=...&unit=...</span> and shows full JSON output.</p>
+        </article>
+      </section>
+
+      <section class="mt-6 grid gap-6 lg:grid-cols-2">
+        <article class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur md:p-6">
+          <h3 class="mb-3 text-lg font-semibold">Request Inspector</h3>
+          <div class="space-y-3 text-sm">
+            <div>
+              <p class="mb-1 text-slate-400">Method</p>
+              <pre id="reqMethod" class="rounded-xl border border-white/10 bg-slate-900/80 p-3">GET</pre>
+            </div>
+            <div>
+              <p class="mb-1 text-slate-400">URL</p>
+              <pre id="reqUrl" class="overflow-auto rounded-xl border border-white/10 bg-slate-900/80 p-3">-</pre>
+            </div>
+            <div>
+              <p class="mb-1 text-slate-400">Request Headers</p>
+              <pre id="reqHeaders" class="overflow-auto rounded-xl border border-white/10 bg-slate-900/80 p-3">{"accept":"application/json"}</pre>
+            </div>
+          </div>
+        </article>
+
+        <article class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur md:p-6">
+          <h3 class="mb-3 text-lg font-semibold">Response Inspector</h3>
+          <div class="mb-3 grid grid-cols-3 gap-3 text-sm">
+            <div class="rounded-xl border border-white/10 bg-slate-900/80 p-3">
+              <p class="text-slate-400">Status</p>
+              <p id="resStatus" class="mt-1 font-semibold">-</p>
+            </div>
+            <div class="rounded-xl border border-white/10 bg-slate-900/80 p-3">
+              <p class="text-slate-400">Duration</p>
+              <p id="resDuration" class="mt-1 font-semibold">-</p>
+            </div>
+            <div class="rounded-xl border border-white/10 bg-slate-900/80 p-3">
+              <p class="text-slate-400">Content-Type</p>
+              <p id="resType" class="mt-1 truncate font-semibold">-</p>
+            </div>
+          </div>
+          <div class="space-y-3 text-sm">
+            <div>
+              <p class="mb-1 text-slate-400">Response Headers</p>
+              <pre id="resHeaders" class="max-h-48 overflow-auto rounded-xl border border-white/10 bg-slate-900/80 p-3">-</pre>
+            </div>
+            <div>
+              <div class="mb-1 flex items-center justify-between text-slate-400">
+                <p>Response Body</p>
+                <button id="copyBody" class="rounded-lg border border-white/20 px-2 py-1 text-xs text-slate-200 hover:bg-white/10">Copy</button>
+              </div>
+              <pre id="resBody" class="max-h-[26rem] overflow-auto rounded-xl border border-white/10 bg-slate-900/80 p-3">-</pre>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <script>
+      const providerEl = document.getElementById("provider");
+      const dateEl = document.getElementById("date");
+      const versionEl = document.getElementById("version");
+      const endpointTemplateEl = document.getElementById("endpointTemplate");
+      const baseCodeEl = document.getElementById("baseCode");
+      const customEndpointEl = document.getElementById("customEndpoint");
+
+      const fromEl = document.getElementById("from");
+      const toEl = document.getElementById("to");
+      const unitEl = document.getElementById("unit");
+
+      const reqMethodEl = document.getElementById("reqMethod");
+      const reqUrlEl = document.getElementById("reqUrl");
+      const reqHeadersEl = document.getElementById("reqHeaders");
+
+      const resStatusEl = document.getElementById("resStatus");
+      const resDurationEl = document.getElementById("resDuration");
+      const resTypeEl = document.getElementById("resType");
+      const resHeadersEl = document.getElementById("resHeaders");
+      const resBodyEl = document.getElementById("resBody");
+
+      function getPagesBase() {
+        const path = location.pathname.endsWith("/") ? location.pathname : location.pathname.replace(/\/[^/]*$/u, "/");
+        return `${location.origin}${path}`;
+      }
+
+      function getBaseUrl(provider) {
+        if (provider === "jsdelivr") {
+          return "https://cdn.jsdelivr.net/gh/Webisso/currency-api@main/docs/";
+        }
+        return getPagesBase();
+      }
+
+      function resolveEndpoint() {
+        const tpl = endpointTemplateEl.value;
+        if (tpl === "custom") {
+          return (customEndpointEl.value || "").replace(/^\/+/u, "");
+        }
+        if (tpl.includes("{base}")) {
+          const base = (baseCodeEl.value || "usd").trim().toLowerCase();
+          return tpl.replace("{base}", base);
+        }
+        return tpl;
+      }
+
+      function buildUrl({ provider, date, version, endpoint }) {
+        const cleanDate = (date || "latest").trim();
+        const cleanVersion = (version || "v1").trim();
+        const cleanEndpoint = (endpoint || "currencies.json").replace(/^\/+/u, "");
+        return `${getBaseUrl(provider)}${cleanDate}/${cleanVersion}/${cleanEndpoint}`;
+      }
+
+      async function sendRequest(url) {
+        reqMethodEl.textContent = "GET";
+        reqUrlEl.textContent = url;
+        reqHeadersEl.textContent = JSON.stringify({ accept: "application/json" }, null, 2);
+
+        const started = performance.now();
+        const response = await fetch(url, { headers: { accept: "application/json" } });
+        const duration = Math.round(performance.now() - started);
+
+        const headersObj = {};
+        response.headers.forEach((value, key) => {
+          headersObj[key] = value;
+        });
+
+        resStatusEl.textContent = `${response.status} ${response.statusText}`;
+        resDurationEl.textContent = `${duration} ms`;
+        resTypeEl.textContent = response.headers.get("content-type") || "-";
+        resHeadersEl.textContent = JSON.stringify(headersObj, null, 2);
+
+        const text = await response.text();
+        try {
+          const json = JSON.parse(text);
+          resBodyEl.textContent = JSON.stringify(json, null, 2);
+        } catch {
+          resBodyEl.textContent = text || "(empty body)";
+        }
+      }
+
+      document.getElementById("sendRequest").addEventListener("click", async () => {
+        try {
+          const url = buildUrl({
+            provider: providerEl.value,
+            date: dateEl.value,
+            version: versionEl.value,
+            endpoint: resolveEndpoint()
+          });
+          await sendRequest(url);
+        } catch (error) {
+          resStatusEl.textContent = "Client Error";
+          resDurationEl.textContent = "-";
+          resTypeEl.textContent = "-";
+          resHeadersEl.textContent = "-";
+          resBodyEl.textContent = JSON.stringify({ error: error.message }, null, 2);
+        }
+      });
+
+      document.getElementById("runConvert").addEventListener("click", async () => {
+        const params = new URLSearchParams({
+          from: (fromEl.value || "USD").trim().toUpperCase(),
+          to: (toEl.value || "EUR").trim().toUpperCase(),
+          unit: (unitEl.value || "1").trim()
+        });
+
+        const convertUrl = `${getBaseUrl(providerEl.value)}latest/v1/convert/?${params.toString()}`;
+
+        try {
+          await sendRequest(convertUrl);
+        } catch (error) {
+          resStatusEl.textContent = "Client Error";
+          resDurationEl.textContent = "-";
+          resTypeEl.textContent = "-";
+          resHeadersEl.textContent = "-";
+          resBodyEl.textContent = JSON.stringify({ error: error.message }, null, 2);
+        }
+      });
+
+      document.getElementById("copyBody").addEventListener("click", async () => {
+        const body = resBodyEl.textContent;
+        if (!body || body === "-") {
+          return;
+        }
+        try {
+          await navigator.clipboard.writeText(body);
+        } catch {
+          /* no-op */
+        }
+      });
+
+      document.getElementById("sendRequest").click();
+    </script>
+  </body>
+</html>
