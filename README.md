@@ -2,9 +2,9 @@
 
 [![Daily Fetch](https://github.com/Webisso/currency-api/actions/workflows/daily-fetch.yml/badge.svg)](https://github.com/Webisso/currency-api/actions/workflows/daily-fetch.yml)
 [![Release](https://img.shields.io/github/v/release/Webisso/currency-api?display_name=tag)](https://github.com/Webisso/currency-api/releases)
-[![Tag](https://img.shields.io/github/v/tag/Webisso/currency-api)](https://github.com/Webisso/currency-api/tags)
-[![Stars](https://img.shields.io/github/stars/Webisso/currency-api?style=social)](https://github.com/Webisso/currency-api/stargazers)
-[![Forks](https://img.shields.io/github/forks/Webisso/currency-api?style=social)](https://github.com/Webisso/currency-api/network/members)
+[![Tag](https://badgen.net/github/tag/Webisso/currency-api)](https://github.com/Webisso/currency-api/tags)
+[![Stars](https://badgen.net/github/stars/Webisso/currency-api)](https://github.com/Webisso/currency-api/stargazers)
+[![Forks](https://badgen.net/github/forks/Webisso/currency-api)](https://github.com/Webisso/currency-api/network/members)
 
 Production-ready currency rates collector and historical JSON API.
 
