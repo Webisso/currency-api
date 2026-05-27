@@ -4,6 +4,125 @@ import { validateSourceXml } from "./utils/xmlValidator.js";
 import { extractRatesFromSourceXml } from "./utils/ratesXmlParser.js";
 import { writeJsonWithMinified } from "./utils/jsonWriter.js";
 
+const CONVERT_JS = `function normalizeCode(value, label) {
+  const code = String(value || "").trim().toLowerCase();
+  if (!/^[a-z]{3}$/u.test(code)) {
+    throw new Error(\`\${label} must be a 3-letter currency code.\`);
+  }
+  return code;
+}
+
+function normalizeUnit(value) {
+  const parsed = Number(value ?? 1);
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    throw new Error("unit must be a positive number.");
+  }
+  return parsed;
+}
+
+function round(value) {
+  return Number(value.toFixed(8));
+}
+
+export async function convertLatest({ from, to, unit = 1, baseUrl = new URL("./", import.meta.url).href } = {}) {
+  const fromCode = normalizeCode(from, "from");
+  const toCode = normalizeCode(to, "to");
+  const amount = normalizeUnit(unit);
+
+  const ratesUrl = new URL(\`currencies/\${fromCode}.json\`, baseUrl).toString();
+  const currenciesUrl = new URL("currencies.json", baseUrl).toString();
+
+  const [ratesResponse, currenciesResponse] = await Promise.all([
+    fetch(ratesUrl, { headers: { accept: "application/json" } }),
+    fetch(currenciesUrl, { headers: { accept: "application/json" } })
+  ]);
+
+  if (!ratesResponse.ok) {
+    throw new Error(\`Could not load latest rates for \${fromCode}: HTTP \${ratesResponse.status}\`);
+  }
+
+  if (!currenciesResponse.ok) {
+    throw new Error(\`Could not load currencies list: HTTP \${currenciesResponse.status}\`);
+  }
+
+  const ratesPayload = await ratesResponse.json();
+  const currencyMap = await currenciesResponse.json();
+
+  const table = ratesPayload[fromCode];
+  if (!table) {
+    throw new Error(\`Missing base table for \${fromCode}.\`);
+  }
+
+  const directRate = table[toCode];
+  if (typeof directRate !== "number") {
+    throw new Error(\`Missing conversion from \${fromCode} to \${toCode}.\`);
+  }
+
+  const fromTry = table.try;
+  const toTry = round(fromTry / directRate);
+  const converted = round(amount * directRate);
+
+  return {
+    date: ratesPayload.date,
+    unit: amount,
+    from: {
+      code: fromCode,
+      name: currencyMap[fromCode] || fromCode,
+      try_rate: fromTry
+    },
+    to: {
+      code: toCode,
+      name: currencyMap[toCode] || toCode,
+      try_rate: toTry
+    },
+    conversion: {
+      rate: round(directRate),
+      amount: converted
+    }
+  };
+}
+
+export async function runLatestConversionFromQuery({ search = globalThis.location?.search || "", target = globalThis.document?.body } = {}) {
+  const params = new URLSearchParams(search);
+  const payload = await convertLatest({
+    from: params.get("from"),
+    to: params.get("to"),
+    unit: params.get("unit") || 1
+  });
+
+  if (target) {
+    target.textContent = JSON.stringify(payload, null, 2);
+  }
+
+  return payload;
+}
+`;
+
+const CONVERT_HTML = `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Currency Conversion</title>
+    <style>
+      body { margin: 0; padding: 24px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: #0b1020; color: #e6edf6; }
+      pre { margin: 0; white-space: pre-wrap; word-break: break-word; }
+    </style>
+  </head>
+  <body>
+    <pre id="result">Loading...</pre>
+    <script type="module">
+      import { runLatestConversionFromQuery } from "../convert.js";
+
+      const resultNode = document.getElementById("result");
+      runLatestConversionFromQuery({ target: resultNode }).catch((error) => {
+        resultNode.textContent = JSON.stringify({ error: error.message }, null, 2);
+      });
+    </script>
+  </body>
+</html>
+`;
+
 function roundRate(value) {
   return Number(value.toFixed(8));
 }
@@ -62,6 +181,15 @@ async function buildDateVersion(outputRoot, snapshot) {
   }
 }
 
+async function writeLatestConversionAssets(outputRoot) {
+  const latestDir = path.join(outputRoot, "latest", "v1");
+  const convertPageDir = path.join(latestDir, "convert");
+
+  await mkdir(convertPageDir, { recursive: true });
+  await writeFile(path.join(latestDir, "convert.js"), CONVERT_JS, "utf8");
+  await writeFile(path.join(convertPageDir, "index.html"), CONVERT_HTML, "utf8");
+}
+
 async function run() {
   const rootDir = process.cwd();
   const dataDir = path.join(rootDir, "data");
@@ -95,6 +223,8 @@ async function run() {
     recursive: true,
     force: true
   });
+
+  await writeLatestConversionAssets(outputDir);
 
   await writeFile(path.join(outputDir, ".nojekyll"), "", "utf8");
 

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Currency Conversion</title>
+    <style>
+      body { margin: 0; padding: 24px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: #0b1020; color: #e6edf6; }
+      pre { margin: 0; white-space: pre-wrap; word-break: break-word; }
+    </style>
+  </head>
+  <body>
+    <pre id="result">Loading...</pre>
+    <script type="module">
+      import { runLatestConversionFromQuery } from "../convert.js";
+
+      const resultNode = document.getElementById("result");
+      runLatestConversionFromQuery({ target: resultNode }).catch((error) => {
+        resultNode.textContent = JSON.stringify({ error: error.message }, null, 2);
+      });
+    </script>
+  </body>
+</html>

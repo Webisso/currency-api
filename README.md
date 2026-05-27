@@ -53,6 +53,19 @@ Format rules:
 - Date example: `/2026-05-25/v1/currencies/eur.json`
 - Minified: `/latest/v1/currencies/eur.min.json`
 
+`/convert/?from=USD&to=EUR&unit=10`
+
+- Latest conversion with query parameters.
+- Returns structured JSON view with source, target, TRY rates, rate and converted amount.
+- Pages example: `https://webisso.github.io/currency-api/latest/v1/convert/?from=USD&to=EUR&unit=10`
+- jsDelivr example: `https://cdn.jsdelivr.net/gh/Webisso/currency-api@main/docs/latest/v1/convert/?from=USD&to=EUR&unit=10`
+
+`/convert.js`
+
+- Browser module for programmatic conversion.
+- Pages: `https://webisso.github.io/currency-api/latest/v1/convert.js`
+- jsDelivr: `https://cdn.jsdelivr.net/gh/Webisso/currency-api@main/docs/latest/v1/convert.js`
+
 ## Live-Style Examples
 
 - `https://webisso.github.io/currency-api/latest/v1/currencies.json`
@@ -96,7 +109,6 @@ Local examples:
 .github/
   workflows/
     daily-fetch.yml
-    pages-deploy.yml
 src/
   fetchRates.js
   buildApi.js
