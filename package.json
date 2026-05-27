@@ -1,7 +1,7 @@
 {
   "name": "currency-api",
   "version": "1.0.0",
-  "description": "Scheduled TCMB currency XML collector with historical file-based storage.",
+  "description": "Scheduled currency rates XML collector with historical file-based storage.",
   "type": "module",
   "private": true,
   "scripts": {

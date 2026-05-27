@@ -1,43 +1,75 @@
-# TCMB Currency Collector
+# Currency Rates API
 
-Production-ready daily collector for TCMB exchange rates XML feed.
+[![Daily Fetch](https://github.com/Webisso/currency-api/actions/workflows/daily-fetch.yml/badge.svg)](https://github.com/Webisso/currency-api/actions/workflows/daily-fetch.yml)
+[![Pages Deploy](https://github.com/Webisso/currency-api/actions/workflows/pages-deploy.yml/badge.svg)](https://github.com/Webisso/currency-api/actions/workflows/pages-deploy.yml)
+[![Release](https://img.shields.io/github/v/release/Webisso/currency-api?display_name=tag)](https://github.com/Webisso/currency-api/releases)
+[![Tag](https://img.shields.io/github/v/tag/Webisso/currency-api)](https://github.com/Webisso/currency-api/tags)
+[![Stars](https://img.shields.io/github/stars/Webisso/currency-api?style=social)](https://github.com/Webisso/currency-api/stargazers)
+[![Forks](https://img.shields.io/github/forks/Webisso/currency-api?style=social)](https://github.com/Webisso/currency-api/network/members)
+
+Production-ready currency rates collector and historical JSON API.
 
 ## Features
 
-- Fetches from `https://www.tcmb.gov.tr/kurlar/today.xml`
-- Saves snapshots to `data/YYYY/MM/YYYY-MM-DD.xml`
-- Retries failed requests up to 3 times with delay
-- Validates XML integrity before persisting
-- Builds versioned JSON API from XML history
-- Serves via REST locally and static CDN-style from GitHub Pages
-- GitHub Actions automation at 17:30 TRT daily
+- Free and fast static JSON responses
+- No rate limiting on published static endpoints
+- Daily data collection and build pipeline
+- Versioned API by date (`latest` and `YYYY-MM-DD`)
+- Pretty and minified JSON formats
+- Local REST/static server for development
+- Fallback-ready client utility for CDN failover
 
-## URL structure (GitHub Pages)
+## API URL Structure
+
+GitHub Pages:
 
 `https://<username>.github.io/<repo>/{date}/{apiVersion}/{endpoint}`
 
-- `date`: `latest` or `YYYY-MM-DD`
-- `apiVersion`: `v1`
-- `endpoint`: `currencies.json`, `currencies.min.json`, `currencies/{base}.json`, `currencies/{base}.min.json`
-
-Examples:
-
-- `/latest/v1/currencies.json`
-- `/latest/v1/currencies/eur.json`
-- `/2026-05-27/v1/currencies/usd.min.json`
-
-## Optional jsDelivr format
-
-After publishing package snapshots, endpoints follow:
+jsDelivr (optional package distribution):
 
 `https://cdn.jsdelivr.net/npm/<package>@{date}/{apiVersion}/{endpoint}`
 
-Recommended fallback pattern in clients:
+Format rules:
 
-1. Try jsDelivr URL
-2. Fallback to Pages URL (`https://{date}.currency-api.pages.dev/...` style can be added behind Cloudflare)
+- `date`: `latest` or `YYYY-MM-DD`
+- `apiVersion`: `v1`
+- endpoint formats:
+  - `/{endpoint}.json`
+  - `/{endpoint}.min.json`
 
-## Local usage
+## Endpoints
+
+`/currencies`
+
+- Returns all supported currencies list.
+- Example: `/latest/v1/currencies.json`
+- Minified: `/latest/v1/currencies.min.json`
+
+`/currencies/{base}`
+
+- Returns full conversion table using `{base}` as base currency.
+- Example: `/latest/v1/currencies/eur.json`
+- Date example: `/2026-05-25/v1/currencies/eur.json`
+- Minified: `/latest/v1/currencies/eur.min.json`
+
+## Live-Style Examples
+
+Replace placeholders with your actual values:
+
+- `https://<username>.github.io/<repo>/latest/v1/currencies.json`
+- `https://<username>.github.io/<repo>/latest/v1/currencies/usd.json`
+- `https://<username>.github.io/<repo>/2026-05-25/v1/currencies/eur.min.json`
+
+## Fallback Pattern
+
+Recommended client strategy:
+
+1. Try jsDelivr URL first.
+2. If it fails, use your fallback host (for example Cloudflare Pages domain).
+
+You can use the built-in helper at `src/client/fetchCurrencyApi.js`.
+
+## Local Usage
 
 ```bash
 npm install
@@ -46,46 +78,55 @@ npm run build:api
 npm start
 ```
 
-Local API examples:
-
-- `http://localhost:3000/latest/v1/currencies.json`
-- `http://localhost:3000/latest/v1/currencies/eur.json`
-- `http://localhost:3000/2026-05-27/v1/currencies/usd.min.json`
-
-Health:
+Local examples:
 
 - `http://localhost:3000/health`
+- `http://localhost:3000/latest/v1/currencies.json`
+- `http://localhost:3000/latest/v1/currencies/eur.json`
+- `http://localhost:3000/2026-05-25/v1/currencies/usd.min.json`
 
-## Data layout
+## Project Structure
 
 ```text
+.github/
+  workflows/
+    daily-fetch.yml
+    pages-deploy.yml
+src/
+  fetchRates.js
+  buildApi.js
+  saveFile.js
+  server.js
+  client/
+    fetchCurrencyApi.js
+  utils/
+    date.js
+    xmlValidator.js
+    ratesXmlParser.js
 data/
   YYYY/
     MM/
       YYYY-MM-DD.xml
-```
-
-## Generated API layout
-
-```text
 public/
   latest/
-    v1/
-      currencies.json
-      currencies.min.json
-      currencies/
-        eur.json
-        eur.min.json
   YYYY-MM-DD/
-    v1/
-      ...
 ```
 
 ## CI/CD
 
-- `daily-fetch.yml`: fetch + validate + build + commit generated `data/` and `public/`
-- `pages-deploy.yml`: publishes `public/` to GitHub Pages
+- `daily-fetch.yml`
+  - Scheduled fetch at `17:30` Turkey time (`14:30 UTC`)
+  - Retries source fetch on transient failures
+  - Builds JSON API outputs
+  - Commits `data/` and `public/` only when changes exist
+- `pages-deploy.yml`
+  - Deploys `public/` to GitHub Pages
 
-## Client fallback helper
+## Configuration
 
-Use [src/client/fetchCurrencyApi.js](src/client/fetchCurrencyApi.js) for primary + fallback retrieval in JS apps.
+Environment variables:
+
+- `CURRENCY_SOURCE_URL` (default: current XML source URL)
+- `CURRENCY_SOURCE_TIMEZONE` (default: `Europe/Istanbul`)
+
+This keeps the system provider-agnostic so source feeds can be changed later without architecture changes.

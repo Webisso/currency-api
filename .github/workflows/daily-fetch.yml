@@ -1,4 +1,4 @@
-name: Daily TCMB Fetch
+name: Daily Currency Fetch
 
 on:
   push:
@@ -34,8 +34,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Fetch and store TCMB XML
+      - name: Fetch and store source XML snapshot
         run: npm run fetch
+
+      - name: Build JSON API artifacts
+        run: npm run build:api
 
       - name: Configure git author
         run: |
@@ -44,10 +47,10 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git add data
+          git add data public
           if git diff --cached --quiet; then
             echo "No data changes to commit."
             exit 0
           fi
-          git commit -m "chore(data): update TCMB snapshot"
+          git commit -m "chore(data): update currency snapshots"
           git push

@@ -1,7 +1,7 @@
 import path from "node:path";
 import { cp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
-import { validateTcmbXml } from "./utils/xmlValidator.js";
-import { extractRatesFromTcmbXml } from "./utils/tcmbParser.js";
+import { validateSourceXml } from "./utils/xmlValidator.js";
+import { extractRatesFromSourceXml } from "./utils/ratesXmlParser.js";
 import { writeJsonWithMinified } from "./utils/jsonWriter.js";
 
 function roundRate(value) {
@@ -81,8 +81,8 @@ async function run() {
 
   for (const xmlPath of xmlFiles) {
     const xml = await readFile(xmlPath, "utf8");
-    validateTcmbXml(xml);
-    const snapshot = extractRatesFromTcmbXml(xml);
+    validateSourceXml(xml);
+    const snapshot = extractRatesFromSourceXml(xml);
     snapshots.push(snapshot);
     await buildDateVersion(outputDir, snapshot);
     console.log(`[build] Generated JSON endpoints for ${snapshot.date}`);

@@ -16,7 +16,7 @@ function toNumber(value) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
-function normalizeTcmbDate(rawDate) {
+function normalizeSourceDate(rawDate) {
   if (!rawDate) {
     return null;
   }
@@ -25,9 +25,9 @@ function normalizeTcmbDate(rawDate) {
     return rawDate;
   }
 
-  const match = String(rawDate).match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
-  if (match) {
-    const [, day, month, year] = match;
+  const dotted = String(rawDate).match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
+  if (dotted) {
+    const [, day, month, year] = dotted;
     return `${year}-${month}-${day}`;
   }
 
@@ -58,7 +58,7 @@ function pickRate(currency) {
   return null;
 }
 
-export function extractRatesFromTcmbXml(xmlContent) {
+export function extractRatesFromSourceXml(xmlContent) {
   const parsed = parser.parse(xmlContent);
   const root = parsed?.Tarih_Date;
 
@@ -66,9 +66,9 @@ export function extractRatesFromTcmbXml(xmlContent) {
     throw new Error("Missing Tarih_Date root element.");
   }
 
-  const normalizedDate = normalizeTcmbDate(root["@_Date"] || root["@_Tarih"]);
+  const normalizedDate = normalizeSourceDate(root["@_Date"] || root["@_Tarih"]);
   if (!normalizedDate) {
-    throw new Error("Could not parse TCMB date from XML attributes.");
+    throw new Error("Could not parse source date from XML attributes.");
   }
 
   const rows = Array.isArray(root.Currency) ? root.Currency : [root.Currency];
