@@ -10,10 +10,10 @@
         theme: {
           extend: {
             fontFamily: {
-              sans: ["Space Grotesk", "ui-sans-serif", "system-ui", "sans-serif"]
+              sans: ["Urbanist", "ui-sans-serif", "system-ui", "sans-serif"]
             },
             boxShadow: {
-              glow: "0 0 0 1px rgba(255,255,255,0.08), 0 20px 80px rgba(59,130,246,0.25)"
+              glow: "0 0 0 1px rgba(148,163,184,0.2), 0 20px 70px rgba(15,23,42,0.08)"
             }
           }
         }
@@ -21,144 +21,148 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   </head>
-  <body class="min-h-screen bg-slate-950 text-slate-100">
+  <body class="min-h-screen bg-slate-50 text-slate-900">
     <div class="fixed inset-0 -z-10 overflow-hidden">
-      <div class="absolute -top-28 -left-20 h-80 w-80 rounded-full bg-cyan-500/20 blur-3xl"></div>
-      <div class="absolute top-1/3 -right-24 h-96 w-96 rounded-full bg-indigo-500/20 blur-3xl"></div>
-      <div class="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl"></div>
+      <div class="absolute -top-28 -left-20 h-80 w-80 rounded-full bg-cyan-200/70 blur-3xl"></div>
+      <div class="absolute top-1/3 -right-24 h-96 w-96 rounded-full bg-sky-200/60 blur-3xl"></div>
+      <div class="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-emerald-100/70 blur-3xl"></div>
     </div>
 
     <main class="mx-auto max-w-7xl px-4 py-10 md:px-8">
-      <header class="mb-10 rounded-3xl border border-white/10 bg-white/[0.04] p-6 shadow-glow backdrop-blur md:p-10">
-        <p class="mb-3 inline-flex items-center rounded-full border border-cyan-300/40 bg-cyan-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200">Currency Data Platform</p>
+      <header class="mb-10 rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-glow backdrop-blur md:p-10">
+        <p class="mb-3 inline-flex items-center rounded-full border border-cyan-300 bg-cyan-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-700">Currency Data Platform</p>
         <h1 class="mb-4 text-3xl font-bold leading-tight md:text-5xl">Realtime Playground for Static Currency Endpoints</h1>
-        <p class="max-w-3xl text-slate-300">Explore date-versioned rates, inspect response headers, and run conversion tests directly against GitHub Pages or jsDelivr. Built for fast testing, debugging, and integration checks.</p>
+        <p class="max-w-3xl text-slate-600">Explore date-versioned rates, inspect response headers, and run conversion tests directly against GitHub Pages or jsDelivr. Built for fast testing, debugging, and integration checks.</p>
         <div class="mt-6 flex flex-wrap gap-3 text-sm">
-          <a class="rounded-xl border border-white/20 bg-white/5 px-4 py-2 hover:bg-white/10" href="./latest/v1/currencies.json" target="_blank" rel="noreferrer">Open latest currencies</a>
-          <a class="rounded-xl border border-white/20 bg-white/5 px-4 py-2 hover:bg-white/10" href="./latest/v1/convert/?from=USD&to=EUR&unit=10" target="_blank" rel="noreferrer">Open conversion query</a>
-          <a class="rounded-xl border border-white/20 bg-white/5 px-4 py-2 hover:bg-white/10" href="https://github.com/Webisso/currency-api" target="_blank" rel="noreferrer">GitHub Repository</a>
+          <a class="rounded-xl border border-slate-300 bg-white px-4 py-2 hover:bg-slate-100" href="./latest/v1/currencies.json" target="_blank" rel="noreferrer">Open latest currencies</a>
+          <a class="rounded-xl border border-slate-300 bg-white px-4 py-2 hover:bg-slate-100" href="./latest/v1/convert/?from=USD&to=EUR&unit=10" target="_blank" rel="noreferrer">Open conversion query</a>
+          <a class="rounded-xl border border-slate-300 bg-white px-4 py-2 hover:bg-slate-100" href="https://github.com/Webisso/currency-api" target="_blank" rel="noreferrer">GitHub Repository</a>
         </div>
       </header>
 
-      <section class="grid gap-6 lg:grid-cols-2">
-        <article class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur md:p-6">
-          <h2 class="mb-4 text-xl font-semibold">Endpoint Playground</h2>
+      <section class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_26rem] xl:items-start">
+        <div class="space-y-6">
+          <section class="grid gap-6 lg:grid-cols-2">
+            <article class="rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm md:p-6">
+              <h2 class="mb-4 text-xl font-semibold">Endpoint Playground</h2>
 
-          <div class="space-y-4">
-            <div>
-              <label class="mb-2 block text-sm text-slate-300">Provider</label>
-              <select id="provider" class="w-full rounded-xl border border-white/15 bg-slate-900 px-3 py-2 outline-none ring-cyan-300/50 focus:ring">
-                <option value="pages">GitHub Pages</option>
-                <option value="jsdelivr">jsDelivr</option>
-              </select>
-            </div>
+              <div class="space-y-4">
+                <div>
+                  <label class="mb-2 block text-sm text-slate-600">Provider</label>
+                  <select id="provider" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none ring-cyan-200 focus:ring">
+                    <option value="pages">GitHub Pages</option>
+                    <option value="jsdelivr">jsDelivr</option>
+                  </select>
+                </div>
 
-            <div class="grid gap-4 md:grid-cols-2">
-              <div>
-                <label class="mb-2 block text-sm text-slate-300">Date</label>
-                <input id="date" value="latest" class="w-full rounded-xl border border-white/15 bg-slate-900 px-3 py-2 outline-none ring-cyan-300/50 focus:ring" placeholder="latest or YYYY-MM-DD" />
+                <div class="grid gap-4 md:grid-cols-2">
+                  <div>
+                    <label class="mb-2 block text-sm text-slate-600">Date</label>
+                    <input id="date" value="latest" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none ring-cyan-200 focus:ring" placeholder="latest or YYYY-MM-DD" />
+                  </div>
+                  <div>
+                    <label class="mb-2 block text-sm text-slate-600">API Version</label>
+                    <input id="version" value="v1" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none ring-cyan-200 focus:ring" />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="mb-2 block text-sm text-slate-600">Endpoint Template</label>
+                  <select id="endpointTemplate" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none ring-cyan-200 focus:ring">
+                    <option value="currencies.json">currencies.json</option>
+                    <option value="currencies.min.json">currencies.min.json</option>
+                    <option value="currencies/{base}.json">currencies/{base}.json</option>
+                    <option value="currencies/{base}.min.json">currencies/{base}.min.json</option>
+                    <option value="custom">custom</option>
+                  </select>
+                </div>
+
+                <div class="grid gap-4 md:grid-cols-2">
+                  <div>
+                    <label class="mb-2 block text-sm text-slate-600">Base Code (if needed)</label>
+                    <input id="baseCode" value="usd" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none ring-cyan-200 focus:ring" placeholder="usd" />
+                  </div>
+                  <div>
+                    <label class="mb-2 block text-sm text-slate-600">Custom Endpoint</label>
+                    <input id="customEndpoint" value="" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none ring-cyan-200 focus:ring" placeholder="e.g. convert.js" />
+                  </div>
+                </div>
+
+                <button id="sendRequest" class="w-full rounded-xl bg-cyan-600 px-4 py-2 font-semibold text-white transition hover:bg-cyan-500">Send GET Request</button>
               </div>
-              <div>
-                <label class="mb-2 block text-sm text-slate-300">API Version</label>
-                <input id="version" value="v1" class="w-full rounded-xl border border-white/15 bg-slate-900 px-3 py-2 outline-none ring-cyan-300/50 focus:ring" />
+            </article>
+
+            <article class="rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm md:p-6">
+              <h2 class="mb-4 text-xl font-semibold">Conversion Playground</h2>
+              <div class="grid gap-4 md:grid-cols-3">
+                <div>
+                  <label class="mb-2 block text-sm text-slate-600">From</label>
+                  <input id="from" value="USD" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none ring-cyan-200 focus:ring" />
+                </div>
+                <div>
+                  <label class="mb-2 block text-sm text-slate-600">To</label>
+                  <input id="to" value="EUR" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none ring-cyan-200 focus:ring" />
+                </div>
+                <div>
+                  <label class="mb-2 block text-sm text-slate-600">Unit</label>
+                  <input id="unit" value="10" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none ring-cyan-200 focus:ring" />
+                </div>
               </div>
-            </div>
+              <button id="runConvert" class="mt-4 w-full rounded-xl bg-emerald-600 px-4 py-2 font-semibold text-white transition hover:bg-emerald-500">Run Conversion Request</button>
+              <p class="mt-4 text-xs text-slate-500">This calls <span class="font-mono">/latest/v1/convert/?from=...&to=...&unit=...</span> and shows full JSON output.</p>
+            </article>
+          </section>
 
-            <div>
-              <label class="mb-2 block text-sm text-slate-300">Endpoint Template</label>
-              <select id="endpointTemplate" class="w-full rounded-xl border border-white/15 bg-slate-900 px-3 py-2 outline-none ring-cyan-300/50 focus:ring">
-                <option value="currencies.json">currencies.json</option>
-                <option value="currencies.min.json">currencies.min.json</option>
-                <option value="currencies/{base}.json">currencies/{base}.json</option>
-                <option value="currencies/{base}.min.json">currencies/{base}.min.json</option>
-                <option value="custom">custom</option>
-              </select>
-            </div>
-
-            <div class="grid gap-4 md:grid-cols-2">
-              <div>
-                <label class="mb-2 block text-sm text-slate-300">Base Code (if needed)</label>
-                <input id="baseCode" value="usd" class="w-full rounded-xl border border-white/15 bg-slate-900 px-3 py-2 outline-none ring-cyan-300/50 focus:ring" placeholder="usd" />
+          <section>
+            <article class="rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm md:p-6">
+              <h3 class="mb-3 text-lg font-semibold">Request Inspector</h3>
+              <div class="space-y-3 text-sm">
+                <div>
+                  <p class="mb-1 text-slate-500">Method</p>
+                  <pre id="reqMethod" class="rounded-xl border border-slate-200 bg-slate-100 p-3">GET</pre>
+                </div>
+                <div>
+                  <p class="mb-1 text-slate-500">URL</p>
+                  <pre id="reqUrl" class="overflow-auto rounded-xl border border-slate-200 bg-slate-100 p-3">-</pre>
+                </div>
+                <div>
+                  <p class="mb-1 text-slate-500">Request Headers</p>
+                  <pre id="reqHeaders" class="overflow-auto rounded-xl border border-slate-200 bg-slate-100 p-3">{"accept":"application/json"}</pre>
+                </div>
               </div>
-              <div>
-                <label class="mb-2 block text-sm text-slate-300">Custom Endpoint</label>
-                <input id="customEndpoint" value="" class="w-full rounded-xl border border-white/15 bg-slate-900 px-3 py-2 outline-none ring-cyan-300/50 focus:ring" placeholder="e.g. convert.js" />
-              </div>
-            </div>
+            </article>
+          </section>
+        </div>
 
-            <button id="sendRequest" class="w-full rounded-xl bg-cyan-400 px-4 py-2 font-semibold text-slate-950 transition hover:bg-cyan-300">Send GET Request</button>
-          </div>
-        </article>
-
-        <article class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur md:p-6">
-          <h2 class="mb-4 text-xl font-semibold">Conversion Playground</h2>
-          <div class="grid gap-4 md:grid-cols-3">
-            <div>
-              <label class="mb-2 block text-sm text-slate-300">From</label>
-              <input id="from" value="USD" class="w-full rounded-xl border border-white/15 bg-slate-900 px-3 py-2 outline-none ring-cyan-300/50 focus:ring" />
-            </div>
-            <div>
-              <label class="mb-2 block text-sm text-slate-300">To</label>
-              <input id="to" value="EUR" class="w-full rounded-xl border border-white/15 bg-slate-900 px-3 py-2 outline-none ring-cyan-300/50 focus:ring" />
-            </div>
-            <div>
-              <label class="mb-2 block text-sm text-slate-300">Unit</label>
-              <input id="unit" value="10" class="w-full rounded-xl border border-white/15 bg-slate-900 px-3 py-2 outline-none ring-cyan-300/50 focus:ring" />
-            </div>
-          </div>
-          <button id="runConvert" class="mt-4 w-full rounded-xl bg-emerald-400 px-4 py-2 font-semibold text-slate-950 transition hover:bg-emerald-300">Run Conversion Request</button>
-          <p class="mt-4 text-xs text-slate-400">This calls <span class="font-mono">/latest/v1/convert/?from=...&to=...&unit=...</span> and shows full JSON output.</p>
-        </article>
-      </section>
-
-      <section class="mt-6 grid gap-6 lg:grid-cols-2">
-        <article class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur md:p-6">
-          <h3 class="mb-3 text-lg font-semibold">Request Inspector</h3>
-          <div class="space-y-3 text-sm">
-            <div>
-              <p class="mb-1 text-slate-400">Method</p>
-              <pre id="reqMethod" class="rounded-xl border border-white/10 bg-slate-900/80 p-3">GET</pre>
-            </div>
-            <div>
-              <p class="mb-1 text-slate-400">URL</p>
-              <pre id="reqUrl" class="overflow-auto rounded-xl border border-white/10 bg-slate-900/80 p-3">-</pre>
-            </div>
-            <div>
-              <p class="mb-1 text-slate-400">Request Headers</p>
-              <pre id="reqHeaders" class="overflow-auto rounded-xl border border-white/10 bg-slate-900/80 p-3">{"accept":"application/json"}</pre>
-            </div>
-          </div>
-        </article>
-
-        <article class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur md:p-6">
+        <article class="rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm md:p-6 xl:sticky xl:top-6">
           <h3 class="mb-3 text-lg font-semibold">Response Inspector</h3>
           <div class="mb-3 grid grid-cols-3 gap-3 text-sm">
-            <div class="rounded-xl border border-white/10 bg-slate-900/80 p-3">
-              <p class="text-slate-400">Status</p>
+            <div class="rounded-xl border border-slate-200 bg-slate-100 p-3">
+              <p class="text-slate-500">Status</p>
               <p id="resStatus" class="mt-1 font-semibold">-</p>
             </div>
-            <div class="rounded-xl border border-white/10 bg-slate-900/80 p-3">
-              <p class="text-slate-400">Duration</p>
+            <div class="rounded-xl border border-slate-200 bg-slate-100 p-3">
+              <p class="text-slate-500">Duration</p>
               <p id="resDuration" class="mt-1 font-semibold">-</p>
             </div>
-            <div class="rounded-xl border border-white/10 bg-slate-900/80 p-3">
-              <p class="text-slate-400">Content-Type</p>
+            <div class="rounded-xl border border-slate-200 bg-slate-100 p-3">
+              <p class="text-slate-500">Content-Type</p>
               <p id="resType" class="mt-1 truncate font-semibold">-</p>
             </div>
           </div>
           <div class="space-y-3 text-sm">
             <div>
-              <p class="mb-1 text-slate-400">Response Headers</p>
-              <pre id="resHeaders" class="max-h-48 overflow-auto rounded-xl border border-white/10 bg-slate-900/80 p-3">-</pre>
+              <p class="mb-1 text-slate-500">Response Headers</p>
+              <pre id="resHeaders" class="max-h-56 overflow-auto rounded-xl border border-slate-200 bg-slate-100 p-3">-</pre>
             </div>
             <div>
-              <div class="mb-1 flex items-center justify-between text-slate-400">
+              <div class="mb-1 flex items-center justify-between text-slate-500">
                 <p>Response Body</p>
-                <button id="copyBody" class="rounded-lg border border-white/20 px-2 py-1 text-xs text-slate-200 hover:bg-white/10">Copy</button>
+                <button id="copyBody" class="rounded-lg border border-slate-300 px-2 py-1 text-xs text-slate-700 hover:bg-slate-100">Copy</button>
               </div>
-              <pre id="resBody" class="max-h-[26rem] overflow-auto rounded-xl border border-white/10 bg-slate-900/80 p-3">-</pre>
+              <pre id="resBody" class="max-h-[32rem] overflow-auto rounded-xl border border-slate-200 bg-slate-100 p-3">-</pre>
             </div>
           </div>
         </article>
