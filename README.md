@@ -129,6 +129,8 @@ docs/
   YYYY-MM-DD/
 ```
 
+Snapshot dosya adlari calisma gunune gore degil, kaynak XML icindeki yayin tarihine gore yazilir. Kaynak saglayici ayni bulteni birden fazla gun sunarsa `data/` ve `docs/` yeni bir tarih klasoru uretmez.
+
 ## CI/CD
 
 - `daily-fetch.yml`
@@ -143,6 +145,5 @@ docs/
 Environment variables:
 
 - `CURRENCY_SOURCE_URL` (default: current XML source URL)
-- `CURRENCY_SOURCE_TIMEZONE` (default: `Europe/Istanbul`)
 
 This keeps the system provider-agnostic so source feeds can be changed later without architecture changes.

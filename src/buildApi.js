@@ -212,18 +212,24 @@ async function run() {
   await rm(outputDir, { recursive: true, force: true });
   await mkdir(outputDir, { recursive: true });
 
-  const snapshots = [];
+  const snapshotsByDate = new Map();
 
   for (const xmlPath of xmlFiles) {
     const xml = await readFile(xmlPath, "utf8");
     validateSourceXml(xml);
     const snapshot = extractRatesFromSourceXml(xml);
-    snapshots.push(snapshot);
+
+    if (snapshotsByDate.has(snapshot.date)) {
+      console.log(`[build] Skipped duplicate snapshot for ${snapshot.date}: ${path.relative(rootDir, xmlPath)}`);
+      continue;
+    }
+
+    snapshotsByDate.set(snapshot.date, snapshot);
     await buildDateVersion(outputDir, snapshot);
     console.log(`[build] Generated JSON endpoints for ${snapshot.date}`);
   }
 
-  snapshots.sort((a, b) => a.date.localeCompare(b.date));
+  const snapshots = [...snapshotsByDate.values()].sort((a, b) => a.date.localeCompare(b.date));
   const latestDate = snapshots[snapshots.length - 1].date;
 
   await cp(path.join(outputDir, latestDate), path.join(outputDir, "latest"), {

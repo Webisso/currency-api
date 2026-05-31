@@ -1,10 +1,9 @@
 import path from "node:path";
-import { getDatePartsInTimeZone } from "./utils/date.js";
 import { validateSourceXml } from "./utils/xmlValidator.js";
+import { extractRatesFromSourceXml } from "./utils/ratesXmlParser.js";
 import { saveXmlSnapshot } from "./saveFile.js";
 
 const SOURCE_XML_URL = process.env.CURRENCY_SOURCE_URL || "https://www.tcmb.gov.tr/kurlar/today.xml";
-const SOURCE_TIMEZONE = process.env.CURRENCY_SOURCE_TIMEZONE || "Europe/Istanbul";
 const MAX_RETRIES = 3;
 const RETRY_DELAY_MS = 2000;
 
@@ -48,13 +47,13 @@ async function fetchSourceXmlWithRetry(url, maxRetries, delayMs) {
 }
 
 async function run() {
-  const dateParts = getDatePartsInTimeZone(SOURCE_TIMEZONE);
   const xmlContent = await fetchSourceXmlWithRetry(SOURCE_XML_URL, MAX_RETRIES, RETRY_DELAY_MS);
+  const snapshot = extractRatesFromSourceXml(xmlContent);
 
   const dataDir = path.resolve(process.cwd(), "data");
   const filePath = await saveXmlSnapshot({
     baseDir: dataDir,
-    dateParts,
+    isoDate: snapshot.date,
     xmlContent
   });
 
